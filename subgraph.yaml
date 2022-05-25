@@ -1,0 +1,26 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: DivineLibrary
+    network: rinkeby
+    source:
+      address: "0x6A4Da1D1EA4fb3E86D891316aBc8EEC1891b2649"
+      abi: DivineLibrary
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - Record
+        - Revoke
+      abis:
+        - name: DivineLibrary
+          file: ./abis/DivineLibrary.json
+      eventHandlers:
+        - event: Record(indexed string,string,indexed address,string,string[])
+          handler: handleRecord
+        - event: Revoke(indexed string,indexed address)
+          handler: handleRevoke
+      file: ./src/mapping.ts
