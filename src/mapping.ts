@@ -1,53 +1,48 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigInt, store } from "@graphprotocol/graph-ts"
 import {
-  DivineLibrary,
+  Library,
   Record,
   Revoke
-} from "../generated/DivineLibrary/DivineLibrary"
-import { ExampleEntity } from "../generated/schema"
+} from "../generated/Library/Library"
+import { Book, Author } from "../generated/schema"
 
 export function handleRecord(event: Record): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
 
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
-  if (!entity) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
-
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
+  let author = Author.load(event.params.author + '-' + event.params.authorWallet.toHexString())
+  if (!author) {
+    author = new Author(event.params.author + '-' + event.params.authorWallet.toHexString())
+    author.name = event.params.author
+    author.wallet = event.params.authorWallet
+    author.bookCount = BigInt.fromI32(1)
+    author.save()
+  } else {
+    author.bookCount = author.bookCount.plus(BigInt.fromI32(1))
+    author.save()
   }
 
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
+  let book = new Book(event.transaction.hash.toHexString())
+  book.title = event.params.title
+  book.author = author.id
+  book.content = event.params.content
+  book.tags = event.params.tags
+  book.timestamp = event.block.timestamp
+  book.save()
 
-  // Entity fields can be set based on event parameters
-  entity.title = event.params.title
-  entity.author = event.params.author
-
-  // Entities can be written to the store with `.save()`
-  entity.save()
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract.getPublishers(...)
-  // - contract.owner(...)
-  // - contract.writePassContract(...)
 }
 
-export function handleRevoke(event: Revoke): void {}
+export function handleRevoke(event: Revoke): void {
+
+  let book = Book.load(event.params.id.toHexString())
+  if (book) {
+    store.remove("Book", book.id)
+    let author = Author.load(book.author)
+    if (author) {
+      if (author.bookCount <= BigInt.fromI32(1)) {
+        store.remove('Author', author.id)
+      } else {
+        author.bookCount = author.bookCount.minus(BigInt.fromI32(1))
+        author.save()
+      }
+    }
+  }
+}

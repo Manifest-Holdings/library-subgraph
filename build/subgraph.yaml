@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: Library
@@ -17,10 +17,10 @@ dataSources:
         - Revoke
       abis:
         - name: Library
-          file: ./abis/Library.json
+          file: Library/abis/Library.json
       eventHandlers:
         - event: Record(string,string,address,string,string[])
           handler: handleRecord
         - event: Revoke(bytes)
           handler: handleRevoke
-      file: ./src/mapping.ts
+      file: Library/Library.wasm
