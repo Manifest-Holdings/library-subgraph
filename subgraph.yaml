@@ -4,10 +4,15 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Library
-    network: mainnet
+    network: rinkeby
     source:
-      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+      address: "0x78598779b538865e91c6bd83e81719d813b245ab"
       abi: Library
+      startBlock: 10972581
+    # network: mainnet
+    # source:
+    #   address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+    #   abi: Library
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
@@ -19,7 +24,7 @@ dataSources:
         - name: Library
           file: ./abis/Library.json
       eventHandlers:
-        - event: Record(string,string,address,string,string[])
+        - event: Record(string,string,address,string,(string,string)[])
           handler: handleRecord
         - event: Revoke(bytes)
           handler: handleRevoke

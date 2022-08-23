@@ -1,9 +1,9 @@
-type Book @entity {
+type Entry @entity {
   id: ID!
   title: String!
   author: Author!
   content: String! 
-  tags: [String!]!
+  tags: [Tag!]!
   timestamp: BigInt!
 }
 
@@ -11,6 +11,13 @@ type Author @entity {
   id: ID!
   wallet: Bytes!
   name: String!
-  bookCount: BigInt!
-  books: [Book!] @derivedFrom(field: "author")
+  entryCount: BigInt!
+  entries: [Entry!] @derivedFrom(field: "author")
+}
+
+type Tag @entity {
+  id: ID!
+  key: String!
+  value: String!
+  entries: [Entry!] @derivedFrom(field: "tags")
 }

@@ -1,16 +1,16 @@
 {
-  "name": "divinelibrary",
+  "name": "librarium",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ treppers/divinelibrary",
-    "create-local": "graph create --node http://localhost:8020/ treppers/divinelibrary",
-    "remove-local": "graph remove --node http://localhost:8020/ treppers/divinelibrary",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 treppers/divinelibrary"
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ open-quill-foundation/Librarium",
+    "create-local": "graph create --node http://localhost:8020/ open-quill-foundation/Librarium",
+    "remove-local": "graph remove --node http://localhost:8020/ open-quill-foundation/Librarium",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 open-quill-foundation/Librarium"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.22.0",
-    "@graphprotocol/graph-ts": "0.22.0"
+    "@graphprotocol/graph-ts": "0.27.0"
   }
 }

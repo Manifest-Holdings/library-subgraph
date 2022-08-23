@@ -4,7 +4,7 @@ import {
   Record,
   Revoke
 } from "../generated/Library/Library"
-import { Book, Author } from "../generated/schema"
+import { Tag, Book, Author } from "../generated/schema"
 
 export function handleRecord(event: Record): void {
 
@@ -20,12 +20,21 @@ export function handleRecord(event: Record): void {
     author.save()
   }
 
+  const tagIds: Array<string> = []
+  for(let i=0; i < event.params.tags.length; i++) {
+    let tag = new Tag(event.transaction.hash.toHexString() + '-' + event.params.tags[i].key)
+    tag.key = event.params.tags[i].key
+    tag.value = event.params.tags[i].value
+    tag.save()
+    tagIds.push(tag.id)
+  }
+
   let book = new Book(event.transaction.hash.toHexString())
   book.title = event.params.title
   book.author = author.id
   book.content = event.params.content
-  book.tags = event.params.tags
   book.timestamp = event.block.timestamp
+  book.tags = tagIds
   book.save()
 
 }
@@ -34,7 +43,7 @@ export function handleRevoke(event: Revoke): void {
 
   let book = Book.load(event.params.id.toHexString())
   if (book) {
-    store.remove("Book", book.id)
+
     let author = Author.load(book.author)
     if (author) {
       if (author.bookCount <= BigInt.fromI32(1)) {
@@ -44,5 +53,12 @@ export function handleRevoke(event: Revoke): void {
         author.save()
       }
     }
+    for(let i=0; i < book.tags.length; i++) {
+      let tag = Tag.load(book.tags[i])
+      if (tag) {
+        store.remove('Tag', tag.id)
+      }
+    }
+    store.remove("Book", book.id)
   }
 }
