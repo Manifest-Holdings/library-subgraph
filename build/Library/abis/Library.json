@@ -120,6 +120,19 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "newNFT",
+        "type": "address"
+      }
+    ],
+    "name": "addNFTWhitelist",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "newPublisher",
         "type": "address"
       }
@@ -131,11 +144,24 @@
   },
   {
     "inputs": [],
+    "name": "getNFTWhitelist",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "getPublishers",
     "outputs": [
       {
         "internalType": "address[]",
-        "name": "publishers",
+        "name": "",
         "type": "address[]"
       }
     ],
@@ -160,11 +186,6 @@
       {
         "internalType": "address",
         "name": "owner_",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "writePassContract_",
         "type": "address"
       }
     ],
@@ -252,6 +273,19 @@
         "type": "uint256"
       }
     ],
+    "name": "removeNFTWhitelist",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "i",
+        "type": "uint256"
+      }
+    ],
     "name": "removePublisher",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -266,19 +300,6 @@
       }
     ],
     "name": "revoke",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newWritePassContract",
-        "type": "address"
-      }
-    ],
-    "name": "setWritePassContract",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -315,8 +336,14 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "writePassContract",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "writePassContracts",
     "outputs": [
       {
         "internalType": "address",
